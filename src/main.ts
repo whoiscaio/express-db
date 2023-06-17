@@ -1,12 +1,12 @@
-import http from 'http';
+import express from 'express';
+import router from './routes';
 
-const PORT = 3000
+const PORT = 3000;
 
-const server = http.createServer((request, response) => {
-  response.statusCode = 200;
-  response.end('Test')
-})
+const app = express();
 
-server.listen(PORT, () => {
+app.use(router)
+
+app.listen(PORT, () => {
   console.log(`Server started at http://localhost:${PORT}`);
-})
+});
