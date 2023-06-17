@@ -1,8 +1,11 @@
 import { Request, Response } from 'express';
+import ProductRepository from '../repository/ProductRepository';
 
 class ProductsController {
   index(request: Request, response: Response) {
-    response.json([]);
+    const products = ProductRepository.getAll();
+
+    response.json(products);
   }
 }
 
