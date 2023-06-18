@@ -8,6 +8,22 @@ class ProductsController {
     response.json(products);
   }
 
+  async find(request: Request, response: Response) {
+    const { id } = request.params;
+
+    if (!/^\d+$/.test(id)) {
+      return response.status(400).json({ message: 'Invalid id provided' });
+    }
+
+    const product = await ProductRepository.findById(Number(id));
+
+    if (!product) {
+      return response.status(404).json({ message: 'Product not found' });
+    }
+
+    return response.json(product);
+  }
+
   async create(request: Request, response: Response) {
     const { name, price } = request.body;
 

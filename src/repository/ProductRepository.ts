@@ -8,6 +8,12 @@ class ProductRepository {
     return products;
   }
 
+  async findById(id: number) {
+    const [product] = await db.query('SELECT * FROM products WHERE id=$1', [id]);
+
+    return product;
+  }
+
   async create(product: IProduct) {
     const { name, price } = product;
 
