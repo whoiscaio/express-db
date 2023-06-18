@@ -45,6 +45,18 @@ class ProductsController {
 
     response.status(201).json(product);
   }
+
+  async delete(request: Request, response: Response) {
+    const { id } = request.params;
+
+    if (!/^\d+$/.test(id)) {
+      return response.status(400).json({ message: 'Invalid id provided' });
+    }
+
+    await ProductRepository.delete(Number(id));
+
+    response.sendStatus(200);
+  }
 }
 
 export default new ProductsController();

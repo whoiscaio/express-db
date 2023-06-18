@@ -25,6 +25,10 @@ class ProductRepository {
 
     return newProduct;
   }
+
+  async delete(id: number) {
+    await db.query('DELETE FROM products WHERE id=$1', [id]);
+  }
 }
 
 export default new ProductRepository();
