@@ -46,6 +46,34 @@ class ProductsController {
     response.status(201).json(product);
   }
 
+  async update(request: Request, response: Response) {
+    const { id } = request.params;
+    const { name, price } = request.body;
+
+    if (!/^\d+$/.test(id)) {
+      return response.status(400).json({ message: 'Invalid id provided' });
+    }
+
+    if (!name) {
+      return response
+        .status(400)
+        .json({ message: 'Property name is required' });
+    }
+
+    if (!price) {
+      return response
+        .status(400)
+        .json({ message: 'Property price is required' });
+    }
+
+    const updatedProduct = await ProductRepository.update(Number(id), {
+      name,
+      price,
+    });
+
+    response.json(updatedProduct);
+  }
+
   async delete(request: Request, response: Response) {
     const { id } = request.params;
 

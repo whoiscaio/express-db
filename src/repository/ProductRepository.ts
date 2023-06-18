@@ -9,7 +9,9 @@ class ProductRepository {
   }
 
   async findById(id: number) {
-    const [product] = await db.query('SELECT * FROM products WHERE id=$1', [id]);
+    const [product] = await db.query('SELECT * FROM products WHERE id=$1', [
+      id,
+    ]);
 
     return product;
   }
@@ -17,13 +19,28 @@ class ProductRepository {
   async create(product: IProduct) {
     const { name, price } = product;
 
-    const [newProduct] = await db.query(`
+    const [newProduct] = await db.query(
+      `
     INSERT INTO products(name, price)
     VALUES($1, $2)
     RETURNING *
-  `, [name, price]);
+  `,
+      [name, price]
+    );
 
     return newProduct;
+  }
+
+  async update(id: number, product: IProduct) {
+    const { name, price } = product;
+
+    const [updatedProduct] = await db.query(`
+        UPDATE products
+        SET name = $1, price = $2
+        WHERE id = $3
+    `, [name, price, id]);
+
+    return updatedProduct;
   }
 
   async delete(id: number) {
