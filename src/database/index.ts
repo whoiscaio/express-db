@@ -5,19 +5,26 @@ const client = new Client({
   port: 5432,
   user: 'root',
   password: 'root',
-  database: 'ecommerce'
+  database: 'ecommerce',
 });
 
-client.connect()
+client
+  .connect()
   .then(() => {
     console.log('Successfully connected to PostgreSQL database');
   })
   .catch(() => {
-    console.log('Some error ocurred while trying to connect to your PostgreSQL database');
+    console.log(
+      'Some error ocurred while trying to connect to your PostgreSQL database'
+    );
   });
 
-export default async function query(query: string) {
-  const { rows } = await client.query(query);
+async function query(query: string, values?: any[]) {
+  const { rows } = await client.query(query, values);
 
   return rows;
 }
+
+export default {
+  query,
+};
