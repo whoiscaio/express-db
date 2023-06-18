@@ -2,8 +2,8 @@ import { Request, Response } from 'express';
 import ProductRepository from '../repository/ProductRepository';
 
 class ProductsController {
-  index(request: Request, response: Response) {
-    const products = ProductRepository.getAll();
+  async index(request: Request, response: Response) {
+    const products = await ProductRepository.getAll();
 
     response.json(products);
   }

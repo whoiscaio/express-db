@@ -1,8 +1,10 @@
-class ProductRepository {
-  private products = []
+import query from '../database';
 
-  getAll() {
-    return this.products;
+class ProductRepository {
+  async getAll() {
+    const products = await query('SELECT * FROM products');
+
+    return products;
   }
 }
 
