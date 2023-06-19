@@ -1,17 +1,21 @@
-import db from '../database';
+import { PrismaClient } from '@prisma/client';
 import { IProduct } from '../interfaces/IProduct';
+
+const db = new PrismaClient();
 
 class ProductRepository {
   async getAll() {
-    const products = await db.query('SELECT * FROM products');
+    const products = await db.product.findMany();
 
     return products;
   }
 
   async findById(id: number) {
-    const [product] = await db.query('SELECT * FROM products WHERE id=$1', [
-      id,
-    ]);
+    const product = await db.product.findUnique({
+      where: {
+        id,
+      },
+    });
 
     return product;
   }
@@ -19,14 +23,12 @@ class ProductRepository {
   async create(product: IProduct) {
     const { name, price } = product;
 
-    const [newProduct] = await db.query(
-      `
-    INSERT INTO products(name, price)
-    VALUES($1, $2)
-    RETURNING *
-  `,
-      [name, price]
-    );
+    const newProduct = await db.product.create({
+      data: {
+        name,
+        price,
+      },
+    });
 
     return newProduct;
   }
@@ -34,17 +36,21 @@ class ProductRepository {
   async update(id: number, product: IProduct) {
     const { name, price } = product;
 
-    const [updatedProduct] = await db.query(`
-        UPDATE products
-        SET name = $1, price = $2
-        WHERE id = $3
-    `, [name, price, id]);
+    const updatedProduct = await db.product.update({
+      where: { id },
+      data: {
+        name,
+        price,
+      },
+    });
 
     return updatedProduct;
   }
 
   async delete(id: number) {
-    await db.query('DELETE FROM products WHERE id=$1', [id]);
+    await db.product.delete({
+      where: { id },
+    });
   }
 }
 
